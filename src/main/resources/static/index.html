@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Pass Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input:hover, select:hover {
+            border-color: #667eea;
+        }
+
+        .date-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            text-align: center;
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            text-align: center;
+        }
+
+        .admin-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .admin-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .admin-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .date-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎫 E-Pass Application</h1>
+        <p class="subtitle">Employee Management System</p>
+        
+        <div class="success-message" id="successMessage">
+            Application submitted successfully! ✓
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            Failed to submit application. Please try again.
+        </div>
+
+        <form id="epassForm">
+            <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="vehicleNumber">Vehicle Number *</label>
+                <input type="text" id="vehicleNumber" name="vehicleNumber" required placeholder="e.g., TN 01 AB 1234" pattern="[A-Z]{2}\s?\d{2}\s?[A-Z]{1,2}\s?\d{4}" title="Format: TN 01 AB 1234">
+            </div>
+
+            <div class="date-group">
+                <div class="form-group">
+                    <label for="dateIn">Date In *</label>
+                    <input type="date" id="dateIn" name="dateIn" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateOut">Date Out *</label>
+                    <input type="date" id="dateOut" name="dateOut" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="mobileNumber">Mobile Number *</label>
+                <input type="tel" id="mobileNumber" name="mobileNumber" required placeholder="10-digit mobile number" pattern="[0-9]{10}" title="Please enter 10 digit mobile number">
+            </div>
+
+            <div class="form-group">
+                <label for="aadharNumber">Aadhar Number *</label>
+                <input type="text" id="aadharNumber" name="aadharNumber" required placeholder="12-digit Aadhar number" pattern="[0-9]{12}" title="Please enter 12 digit Aadhar number">
+            </div>
+
+            <div class="form-group">
+                <label for="placeToVisit">Place to Visit *</label>
+                <select id="placeToVisit" name="placeToVisit" required>
+                    <option value="">-- Select a destination --</option>
+                    <option value="Ooty">Ooty</option>
+                    <option value="Kolli Hills">Kolli Hills</option>
+                    <option value="Kodaikanal">Kodaikanal</option>
+                </select>
+            </div>
+
+            <button type="submit">Submit Application</button>
+        </form>
+
+        <div class="admin-link">
+            <a href="admin.html">Admin Dashboard →</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('epassForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+
+            // Validate dates
+            const dateIn = new Date(document.getElementById('dateIn').value);
+            const dateOut = new Date(document.getElementById('dateOut').value);
+            
+            if (dateOut < dateIn) {
+                errorMsg.textContent = 'Date Out cannot be earlier than Date In';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            const formData = {
+                name: document.getElementById('name').value,
+                vehicleNumber: document.getElementById('vehicleNumber').value.toUpperCase(),
+                dateIn: document.getElementById('dateIn').value,
+                dateOut: document.getElementById('dateOut').value,
+                mobileNumber: document.getElementById('mobileNumber').value,
+                aadharNumber: document.getElementById('aadharNumber').value,
+                placeToVisit: document.getElementById('placeToVisit').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/api/epass/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    successMsg.style.display = 'block';
+                    document.getElementById('epassForm').reset();
+                    setTimeout(() => {
+                        successMsg.style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                errorMsg.style.display = 'block';
+                console.error('Error:', error);
+            }
+        });
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('dateIn').setAttribute('min', today);
+        document.getElementById('dateOut').setAttribute('min', today);
+
+        // Update Date Out minimum when Date In changes
+        document.getElementById('dateIn').addEventListener('change', function() {
+            document.getElementById('dateOut').setAttribute('min', this.value);
+        });
+    </script>
+</body>
+</html>

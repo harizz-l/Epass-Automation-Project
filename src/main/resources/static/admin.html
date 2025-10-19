@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - E-Pass Applications</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .controls {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .btn-refresh {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 16px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .table-container {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Admin Dashboard</h1>
+            <p class="subtitle">E-Pass Application Management System</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalApplications">0</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeApplications">0</div>
+                <div class="stat-label">Active Passes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedApplications">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by name, vehicle number, or mobile...">
+            </div>
+            <select class="filter-select" id="placeFilter">
+                <option value="">All Destinations</option>
+                <option value="Ooty">Ooty</option>
+                <option value="Kolli Hills">Kolli Hills</option>
+                <option value="Kodaikanal">Kodaikanal</option>
+            </select>
+            <button class="btn-refresh" onclick="loadApplications()">🔄 Refresh</button>
+        </div>
+
+        <div class="table-container">
+            <div class="loading" id="loading">Loading applications...</div>
+            <table id="applicationsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Vehicle No.</th>
+                        <th>Mobile</th>
+                        <th>Aadhar</th>
+                        <th>Date In</th>
+                        <th>Date Out</th>
+                        <th>Destination</th>
+                        <th>Status</th>
+                        <th>Applied On</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+            <div class="no-data" id="noData" style="display: none;">
+                No applications found
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">← Back to Application Form</a>
+    </div>
+
+    <script>
+        let allApplications = [];
+
+        async function loadApplications() {
+            const loading = document.getElementById('loading');
+            const table = document.getElementById('applicationsTable');
+            const noData = document.getElementById('noData');
+            
+            loading.style.display = 'block';
+            table.style.display = 'none';
+            noData.style.display = 'none';
+
+            try {
+                const response = await fetch('http://localhost:8080/api/epass/all');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch applications');
+                }
+                
+                allApplications = await response.json();
+                updateStats();
+                displayApplications(allApplications);
+                
+                loading.style.display = 'none';
+                
+                if (allApplications.length > 0) {
+                    table.style.display = 'table';
+                } else {
+                    noData.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                loading.textContent = 'Failed to load applications. Please check if the server is running.';
+            }
+        }
+
+        function displayApplications(applications) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            applications.forEach(app => {
+                const status = getStatus(app.dateIn, app.dateOut);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${app.id}</td>
+                    <td>${app.name}</td>
+                    <td>${app.vehicleNumber}</td>
+                    <td>${app.mobileNumber}</td>
+                    <td>${app.aadharNumber}</td>
+                    <td>${formatDate(app.dateIn)}</td>
+                    <td>${formatDate(app.dateOut)}</td>
+                    <td>${app.placeToVisit}</td>
+                    <td><span class="status-badge ${status.class}">${status.text}</span></td>
+                    <td>${formatDateTime(app.createdAt)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function getStatus(dateIn, dateOut) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const inDate = new Date(dateIn);
+            const outDate = new Date(dateOut);
+
+            if (today >= inDate && today <= outDate) {
+                return { text: 'Active', class: 'status-active' };
+            } else if (today > outDate) {
+                return { text: 'Completed', class: 'status-completed' };
+            } else {
+                return { text: 'Scheduled', class: 'status-active' };
+            }
+        }
+
+        function updateStats() {
+            const total = allApplications.length;
+            let active = 0;
+            let completed = 0;
+
+            allApplications.forEach(app => {
+                const status = getStatus(app.dateIn, app.dateOut);
+                if (status.text === 'Active' || status.text === 'Scheduled') {
+                    active++;
+                } else {
+                    completed++;
+                }
+            });
+
+            document.getElementById('totalApplications').textContent = total;
+            document.getElementById('activeApplications').textContent = active;
+            document.getElementById('completedApplications').textContent = completed;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
+        function formatDateTime(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', { 
+                day: '2-digit', 
+                month: 'short', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', filterApplications);
+        document.getElementById('placeFilter').addEventListener('change', filterApplications);
+
+        function filterApplications() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const placeFilter = document.getElementById('placeFilter').value;
+
+            const filtered = allApplications.filter(app => {
+                const matchesSearch = 
+                    app.name.toLowerCase().includes(searchTerm) ||
+                    app.vehicleNumber.toLowerCase().includes(searchTerm) ||
+                    app.mobileNumber.includes(searchTerm);
+                
+                const matchesPlace = !placeFilter || app.placeToVisit === placeFilter;
+
+                return matchesSearch && matchesPlace;
+            });
+
+            displayApplications(filtered);
+        }
+
+        // Load applications on page load
+        loadApplications();
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadApplications, 30000);
+    </script>
+</body>
+</html>
